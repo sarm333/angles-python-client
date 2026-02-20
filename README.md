@@ -66,23 +66,6 @@ builds = BuildRequests(http)
 build = builds.get_build("your-build-id")
 ```
 
-## Notes
-
-* Methods are synchronous (raise exceptions on non-2xx), mirroring the JS client’s Promise rejection behavior.
-* The API payload shape follows the JS client and Angles API conventions.
-
-
-## Publishing (GitHub + PyPI)
-
-This repo includes GitHub Actions workflows to publish the package automatically using **Trusted Publishing**.
-
-### One-time setup
-
-1. Create the GitHub repository and push this code.
-2. Create the project on **PyPI** (and optionally **TestPyPI**) using the same distribution name as
-   `project.name` in `pyproject.toml`. If the name is already taken on PyPI, change `project.name`.
-3. In PyPI project settings, add a **Trusted Publisher** for GitHub Actions pointing at your repo.
-   This allows publishing without storing a long-lived API token.
 
 ### Publish a release to PyPI
 
