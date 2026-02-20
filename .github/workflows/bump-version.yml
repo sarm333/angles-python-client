@@ -1,0 +1,58 @@
+name: Bump version and tag
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: "Which part to bump?"
+        required: true
+        default: "patch"
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+      target:
+        description: "Where will this tag be used?"
+        required: true
+        default: "pypi"
+        type: choice
+        options:
+          - pypi
+          - testpypi
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install bump2version
+        run: python -m pip install -U pip bump2version
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+
+      - name: Bump version + create tag
+        run: |
+          if [ "${{ inputs.target }}" = "testpypi" ]; then
+            bump2version --tag-name "test-v{new_version}" "${{ inputs.bump }}"
+          else
+            bump2version "${{ inputs.bump }}"
+          fi
+
+      - name: Push commit + tags
+        run: |
+          git push
+          git push --tags

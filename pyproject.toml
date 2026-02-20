@@ -23,3 +23,10 @@ package-dir = {"" = "."}
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["angles_python_client*"]
+
+[project.optional-dependencies]
+dev = [
+  "build>=1.2.1",
+  "twine>=5.1.1",
+  "bump2version>=1.0.1",
+]

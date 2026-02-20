@@ -96,3 +96,37 @@ python -m build
 python -m twine check dist/*
 python -m twine upload dist/*
 ```
+
+
+## Versioning
+
+This project uses a standard `pyproject.toml` `version = "X.Y.Z"` field.
+
+### Bump version locally (and create a tag)
+
+```bash
+pip install -U bump2version
+bump2version patch   # or minor / major
+git push --follow-tags
+```
+
+### Bump via GitHub Actions (and publish)
+
+Run the **Bump version and tag** workflow (Actions tab) and choose:
+
+- `target=pypi` → creates a tag like `v1.0.1` (triggers the PyPI publish workflow)
+- `target=testpypi` → creates a tag like `test-v1.0.1` (triggers the TestPyPI publish workflow)
+
+
+## Auto-release on main/master
+
+This repo includes an **optional** workflow: `.github/workflows/release-on-main.yml`.
+
+When enabled (it is committed by default), **every push to `main` or `master`** will:
+
+1. Read the current `project.version` from `pyproject.toml`
+2. Create and push a git tag `vX.Y.Z` (if it doesn't already exist)
+3. Build and publish to PyPI (Trusted Publishing)
+4. Bump the version **patch** for the next release and push that commit back to the default branch
+
+To avoid loops, the post-bump commit includes `[skip release]` and the workflow ignores commits containing that marker.
