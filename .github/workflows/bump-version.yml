@@ -44,12 +44,27 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@users.noreply.github.com"
 
+- name: Export VERSION from pyproject.toml
+  shell: bash
+  run: |
+    VERSION=$(python - <<'PY'
+    try:
+      import tomllib
+    except Exception:
+      import tomli as tomllib  # type: ignore
+    from pathlib import Path
+    data = tomllib.loads(Path("pyproject.toml").read_text("utf-8"))
+    print(data["project"]["version"])
+    PY
+    )
+    echo "VERSION=$VERSION" >> $GITHUB_ENV
+
       - name: Bump version + create tag
         run: |
           if [ "${{ inputs.target }}" = "testpypi" ]; then
-            bump2version --tag-name "test-v{new_version}" "${{ inputs.bump }}"
+            bump2version --current-version "$VERSION" --tag-name "test-v{new_version}" "${{ inputs.bump }}"
           else
-            bump2version "${{ inputs.bump }}"
+            bump2version --current-version "$VERSION" "${{ inputs.bump }}"
           fi
 
       - name: Push commit + tags

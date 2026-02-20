@@ -96,5 +96,5 @@ jobs:
 
       - name: Post-release bump (patch) and push back to default branch
         run: |
-          bump2version --no-tag --message "chore: post-release bump [skip release]" patch
+          bump2version --no-tag --current-version "${VERSION}" --message "chore: post-release bump [skip release]" patch
           git push
