@@ -69,17 +69,17 @@ reporter_gib = AnglesReporter(base_url="https://angles-api.example/rest/api/v1.0
 reporter_games_dev = AnglesReporter(base_url="https://angles-api.example/rest/api/v1.0/")
 
 reporter_gib.start_build(
-    name="[suite] gib",
-    team="sre-agent",
-    environment="live-gib",
-    component="saucelabs",
+    name="[suite] test-suite integration",
+    team="some-team",
+    environment="integration",
+    component="some-component",
 )
 
 reporter_games_dev.start_build(
-    name="[suite] games-dev",
-    team="sre-agent",
-    environment="games-dev",
-    component="saucelabs",
+    name="[suite] test-suite dev",
+    team="some-team",
+    environment="dev",
+    component="some-component",
 )
 ```
 
